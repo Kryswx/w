@@ -1,0 +1,91 @@
+
+function start()	
+	local UIS = game:GetService("UserInputService")
+	local ply = game.Players.LocalPlayer
+	local guiOpened = false
+	local buttonEnabled = false
+
+
+	local scGui = Instance.new("ScreenGui")
+	scGui.Name = "scGui"
+	scGui.Parent = ply.PlayerGui
+
+	local frame = Instance.new("Frame")
+	local stroke2 = Instance.new("UIStroke", frame)
+	local corner2 = Instance.new("UICorner", frame)
+
+	stroke2.Thickness = 3
+	stroke2.ApplyStrokeMode = "Border"
+	stroke2.Color = Color3.new(1,1,1)
+	corner2.CornerRadius = UDim.new(0.03, 0)
+
+	frame.Visible = false
+	frame.Size = UDim2.new(0.234, 0,0.518, 0)
+	frame.Position = UDim2.new(0.1, 0,0.184, 0)
+	frame.BackgroundColor3 = Color3.new(0.0235294, 0.0235294, 0.0235294)
+	frame.BackgroundTransparency = 0.25
+
+
+	frame.Parent = scGui
+
+
+	UIS.InputBegan:Connect(function(button, typing)
+		if typing then return end
+		
+		if button.KeyCode == Enum.KeyCode.Insert then
+			if guiOpened == false then
+				guiOpened = true
+				frame.Visible = true
+			elseif guiOpened == true then
+				guiOpened = false
+				frame.Visible = false
+			end
+		end
+	end)
+
+	local button = Instance.new("TextButton")
+	local stroke = Instance.new("UIStroke")
+	local corner = Instance.new("UICorner")
+
+	button.BackgroundTransparency = 0.8
+	button.BackgroundColor3 = Color3.new(255,0,0)
+	button.Text = "??"
+	button.TextColor3 = Color3.new(255,255,255)
+
+
+	stroke.Thickness = 3
+	stroke.ApplyStrokeMode = "Border"
+	stroke.Color = Color3.new(1,1,1)
+	corner.CornerRadius = UDim.new(0.03,0)
+
+
+	stroke.Parent = button
+	corner.Parent = button
+
+	button.Parent = frame
+	button.Size = UDim2.new(0, 29,0, 29)
+	button.Position = UDim2.new(0.185, 0,0.097, 0)
+
+	button.MouseButton1Click:Connect(function()
+		if buttonEnabled == false then
+			buttonEnabled = true
+			for _,v in pairs(game.Players:GetChildren()) do
+				local hk = Instance.new("Highlight")
+				hk.Name = "hHK"
+				hk.FillTransparency = 1
+				hk.Parent = v.Character
+			end
+		elseif buttonEnabled == true then
+			buttonEnabled = false
+			for _,v in pairs(game.Players:GetChildren()) do
+				if v.Character:FindFirstChild("hHK") then
+					v.Character:FindFirstChild("hHK"):Destroy()
+				end
+			end
+		end
+	end)
+end
+
+start()
+
+game.Players.LocalPlayer.CharacterAdded:Connect(start)
